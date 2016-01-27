@@ -1,4 +1,4 @@
-package com.innodroid.expandablerecyclerdemo;
+package com.example.expandablerecyclerview;
 
 import org.junit.Test;
 
