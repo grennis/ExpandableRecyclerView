@@ -1,15 +1,15 @@
 package com.innodroid.expandablerecyclerdemo;
 
 import android.content.Context;
-import android.support.annotation.BinderThread;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.innodroid.expandablerecycler.ExpandableRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.Bind;
 
 public class PeopleAdapter extends ExpandableRecyclerAdapter<PeopleAdapter.PeopleListItem> {
     public static final int TYPE_PERSON = 1001;
@@ -37,10 +37,12 @@ public class PeopleAdapter extends ExpandableRecyclerAdapter<PeopleAdapter.Peopl
     }
 
     public class HeaderViewHolder extends ExpandableRecyclerAdapter.HeaderViewHolder {
-        @Bind(R.id.item_header_name) TextView name;
+        TextView name;
 
         public HeaderViewHolder(View view) {
-            super(view);
+            super(view, (ImageView) view.findViewById(R.id.item_arrow));
+
+            name = (TextView) view.findViewById(R.id.item_header_name);
         }
 
         public void bind(int position) {
@@ -49,10 +51,12 @@ public class PeopleAdapter extends ExpandableRecyclerAdapter<PeopleAdapter.Peopl
     }
 
     public class PersonViewHolder extends ExpandableRecyclerAdapter.ViewHolder {
-        @Bind(R.id.item_name) TextView name;
+        TextView name;
 
         public PersonViewHolder(View view) {
             super(view);
+
+            name = (TextView) view.findViewById(R.id.item_name);
         }
 
         public void bind(int position) {

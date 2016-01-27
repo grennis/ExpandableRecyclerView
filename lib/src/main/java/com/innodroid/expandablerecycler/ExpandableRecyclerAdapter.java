@@ -1,4 +1,4 @@
-package com.innodroid.expandablerecyclerdemo;
+package com.innodroid.expandablerecycler;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -10,9 +10,6 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 public abstract class ExpandableRecyclerAdapter<T extends ExpandableRecyclerAdapter.ListItem> extends RecyclerView.Adapter<ExpandableRecyclerAdapter.ViewHolder> {
     protected Context mContext;
@@ -54,16 +51,16 @@ public abstract class ExpandableRecyclerAdapter<T extends ExpandableRecyclerAdap
     public class ViewHolder extends RecyclerView.ViewHolder {
         public ViewHolder(View view) {
             super(view);
-
-            ButterKnife.bind(this, view);
         }
     }
 
     public class HeaderViewHolder extends ViewHolder {
-        @Bind(R.id.item_arrow) ImageView arrow;
+        ImageView arrow;
 
-        public HeaderViewHolder(View view) {
+        public HeaderViewHolder(View view, ImageView arrow) {
             super(view);
+
+            this.arrow = arrow;
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
