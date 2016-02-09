@@ -46,6 +46,8 @@ public class PeopleAdapter extends ExpandableRecyclerAdapter<PeopleAdapter.Peopl
         }
 
         public void bind(int position) {
+            super.bind(position);
+
             name.setText(visibleItems.get(position).Text);
         }
     }
