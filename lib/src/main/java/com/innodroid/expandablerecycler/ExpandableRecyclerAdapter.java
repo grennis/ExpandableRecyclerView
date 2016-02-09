@@ -57,7 +57,7 @@ public abstract class ExpandableRecyclerAdapter<T extends ExpandableRecyclerAdap
     public class HeaderViewHolder extends ViewHolder {
         ImageView arrow;
 
-        public HeaderViewHolder(View view, ImageView arrow) {
+        public HeaderViewHolder(View view, final ImageView arrow) {
             super(view);
 
             this.arrow = arrow;
@@ -65,55 +65,69 @@ public abstract class ExpandableRecyclerAdapter<T extends ExpandableRecyclerAdap
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    toggleExpandedItems(getLayoutPosition());
+                    if (toggleExpandedItems(getLayoutPosition(), false)) {
+                        openArrow(arrow);
+                    } else {
+                        closeArrow(arrow);
+                    }
                 }
             });
         }
 
-        private void toggleExpandedItems(int position) {
-            int allItemsPosition = indexList.get(position);
-
-            if (isExpanded(position)) {
-                collapseItems(position);
-                expandMap.delete(allItemsPosition);
-                closeArrow(arrow);
-            } else {
-                expandItems(position);
-                expandMap.put(allItemsPosition, 1);
-                openArrow(arrow);
-            }
-        }
-
-        private void expandItems(int position) {
-            int count = 0;
-            int index = indexList.get(position);
-            int insert = position;
-
-            for (int i=index+1; i<allItems.size() && allItems.get(i).ItemType != TYPE_HEADER; i++) {
-                insert++;
-                count++;
-                visibleItems.add(insert, allItems.get(i));
-                indexList.add(insert, i);
-            }
-
-            notifyItemRangeInserted(position + 1, count);
-        }
-
-        private void collapseItems(int position) {
-            int count = 0;
-            int index = indexList.get(position);
-
-            for (int i=index+1; i<allItems.size() && allItems.get(i).ItemType != TYPE_HEADER; i++) {
-                count++;
-                visibleItems.remove(position + 1);
-                indexList.remove(position + 1);
-            }
-
-            notifyItemRangeRemoved(position + 1, count);
-        }
-
         public void bind(int position) {
             arrow.setRotation(isExpanded(position) ? 90 : 0);
+        }
+    }
+
+    public boolean toggleExpandedItems(int position, boolean notify) {
+        if (isExpanded(position)) {
+            collapseItems(position, notify);
+            return false;
+        } else {
+            expandItems(position, notify);
+            return true;
+        }
+    }
+
+    public void expandItems(int position, boolean notify) {
+        int count = 0;
+        int index = indexList.get(position);
+        int insert = position;
+
+        for (int i=index+1; i<allItems.size() && allItems.get(i).ItemType != TYPE_HEADER; i++) {
+            insert++;
+            count++;
+            visibleItems.add(insert, allItems.get(i));
+            indexList.add(insert, i);
+        }
+
+        notifyItemRangeInserted(position + 1, count);
+
+        int allItemsPosition = indexList.get(position);
+        expandMap.put(allItemsPosition, 1);
+
+        if (notify) {
+            notifyItemChanged(position);
+        }
+    }
+
+    public void collapseItems(int position, boolean notify) {
+        int count = 0;
+        int index = indexList.get(position);
+
+        for (int i=index+1; i<allItems.size() && allItems.get(i).ItemType != TYPE_HEADER; i++) {
+            count++;
+            visibleItems.remove(position + 1);
+            indexList.remove(position + 1);
+        }
+
+        notifyItemRangeRemoved(position + 1, count);
+
+        int allItemsPosition = indexList.get(position);
+        expandMap.delete(allItemsPosition);
+
+        if (notify) {
+            notifyItemChanged(position);
         }
     }
 
@@ -203,6 +217,26 @@ public abstract class ExpandableRecyclerAdapter<T extends ExpandableRecyclerAdap
         }
 
         indexList = newIndexList;
+    }
+
+    public void collapseAll() {
+        for (int i=visibleItems.size()-1; i>=0; i--) {
+            if (getItemViewType(i) == TYPE_HEADER) {
+                if (isExpanded(i)) {
+                    collapseItems(i, true);
+                }
+            }
+        }
+    }
+
+    public void expandAll() {
+        for (int i=visibleItems.size()-1; i>=0; i--) {
+            if (getItemViewType(i) == TYPE_HEADER) {
+                if (!isExpanded(i)) {
+                    expandItems(i, true);
+                }
+            }
+        }
     }
 
     public static void openArrow(View view) {
