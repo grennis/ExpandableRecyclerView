@@ -19,7 +19,7 @@ Then add this to your build.gradle dependencies for the project where you want t
 
     dependencies {
       ...
-      compile 'com.github.grennis:ExpandableRecyclerView:0.9.1'
+      compile 'com.github.grennis:ExpandableRecyclerView:0.9.2'
     }
 
 # Usage
@@ -40,6 +40,10 @@ Define your items that derive from ExpandableRecyclerAdapter.ListItem
     }
 
 Use the `TYPE_HEADER` for the expandable header items. Define other types as needed for your application.
+
+You can set a mode to collapse other items when an item is opened:
+
+    adapter.setMode(ExpandableRecyclerAdapter.MODE_ACCORDION);
 
 For more information, browse the [Sample App](https://github.com/grennis/ExpandableRecyclerView/tree/master/app/src/main/java/com/innodroid/expandablerecyclerdemo).
 
