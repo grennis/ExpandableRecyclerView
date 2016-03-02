@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.innodroid.expandablerecycler.ExpandableRecyclerAdapter;
+
 public class MainActivity extends AppCompatActivity {
     RecyclerView recycler;
     PeopleAdapter adapter;
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         recycler = (RecyclerView) findViewById(R.id.main_recycler);
 
         adapter = new PeopleAdapter(this);
+        adapter.setMode(ExpandableRecyclerAdapter.MODE_ACCORDION);
         recycler.setLayoutManager(new LinearLayoutManager(this));
         recycler.setAdapter(adapter);
     }

@@ -17,10 +17,14 @@ public abstract class ExpandableRecyclerAdapter<T extends ExpandableRecyclerAdap
     protected List<T> visibleItems = new ArrayList<>();
     private List<Integer> indexList = new ArrayList<>();
     private SparseIntArray expandMap = new SparseIntArray();
+    private int mode;
 
     protected static final int TYPE_HEADER = 1000;
 
     private static final int ARROW_ROTATION_DURATION = 150;
+
+    public static final int MODE_NORMAL = 0;
+    public static final int MODE_ACCORDION = 1;
 
     public ExpandableRecyclerAdapter(Context context) {
         mContext = context;
@@ -85,6 +89,11 @@ public abstract class ExpandableRecyclerAdapter<T extends ExpandableRecyclerAdap
             return false;
         } else {
             expandItems(position, notify);
+
+            if (mode == MODE_ACCORDION) {
+                collapseAllExcept(position);
+            }
+
             return true;
         }
     }
@@ -220,8 +229,12 @@ public abstract class ExpandableRecyclerAdapter<T extends ExpandableRecyclerAdap
     }
 
     public void collapseAll() {
+        collapseAllExcept(-1);
+    }
+
+    public void collapseAllExcept(int position) {
         for (int i=visibleItems.size()-1; i>=0; i--) {
-            if (getItemViewType(i) == TYPE_HEADER) {
+            if (i != position && getItemViewType(i) == TYPE_HEADER) {
                 if (isExpanded(i)) {
                     collapseItems(i, true);
                 }
@@ -245,5 +258,13 @@ public abstract class ExpandableRecyclerAdapter<T extends ExpandableRecyclerAdap
 
     public static void closeArrow(View view) {
         view.animate().setDuration(ARROW_ROTATION_DURATION).rotation(0);
+    }
+
+    public int getMode() {
+        return mode;
+    }
+
+    public void setMode(int mode) {
+        this.mode = mode;
     }
 }
