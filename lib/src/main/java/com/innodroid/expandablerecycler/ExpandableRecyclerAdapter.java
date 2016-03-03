@@ -69,13 +69,17 @@ public abstract class ExpandableRecyclerAdapter<T extends ExpandableRecyclerAdap
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (toggleExpandedItems(getLayoutPosition(), false)) {
-                        openArrow(arrow);
-                    } else {
-                        closeArrow(arrow);
-                    }
+                    handleClick();
                 }
             });
+        }
+
+        protected void handleClick() {
+            if (toggleExpandedItems(getLayoutPosition(), false)) {
+                openArrow(arrow);
+            } else {
+                closeArrow(arrow);
+            }
         }
 
         public void bind(int position) {

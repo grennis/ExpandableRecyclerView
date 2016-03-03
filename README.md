@@ -19,7 +19,7 @@ Then add this to your build.gradle dependencies for the project where you want t
 
     dependencies {
       ...
-      compile 'com.github.grennis:ExpandableRecyclerView:0.9.2'
+      compile 'com.github.grennis:ExpandableRecyclerView:0.9.3'
     }
 
 # Usage
